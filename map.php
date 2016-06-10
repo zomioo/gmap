@@ -127,6 +127,6 @@
 </script>
 </head>
 <body>
-	<div id="map_canvas" style="width: 860px; height: 360px"></div>
+	<div id="map_canvas" style="width: 550px; height: 360px"></div>
 </body>
 </html>

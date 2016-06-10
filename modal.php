@@ -1,21 +1,20 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html>
+<html lang="en">
 <head>
+  <?php require_once 'database.php';?>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <?php require 'database.php';?>
-  <!-- <link rel="shortcut icon" href=""> -->
-  <title>Monitoreo de niveles de agua</title>
+  <title>jQuery UI Dialog - Modal confirmation</title>
+  <link rel="stylesheet" href="js/jquery-ui/jquery-ui.css">
+  <script src="js/jquery-1.12.0.min.js"></script>
+  <script src="js/jquery-ui/jquery-ui.js"></script>
+  <style type="text/css">
+  body {
+  font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
+  font-size: 70%;
+  }
+  </style>
+  
 
-  <!-- Bootstrap core CSS -->
-  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="css/estilos.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-  <script src="bootstrap/js/bootstrap.min.js"></script>
-  <!-- modal -->
- <link rel="stylesheet" href="js/jquery-ui/jquery-ui.css">
- <script src="js/jquery-ui/jquery-ui.js"></script>
 <script>
   $(function() {
     $( "#dialog" ).dialog({
@@ -38,31 +37,10 @@
     });
   });
   </script>
-  <!-- /modal-->
-
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $("#recargable").load('cargar2.php');
-      function cargando(){
-       $("#recargable").load('cargar2.php');
-       
-      }
-      setInterval(cargando, <?php echo $timer; ?>);
-     
-    });
-  </script>
 </head>
 <body>
-    <br>
-    <div class="panel panel-primary">
-    <div class="panel-heading">
-      <div class="row">
-        <div  class="col-md-12"><h3 style="color:white;" class="text-center"><strong>Panel de Control</strong></h3></div>
-      </div>
-    </div>
 
-<!--  <datapicker>  --> 
-    <div id="dialog" title="Seleccionar Estación y Período" >
+<div id="dialog" title="Seleccionar Estación y Período" >
      <?php
      $objdatabase = new Database();
      $sql = $objdatabase->prepare('SELECT Id, Id_Movil, EVE, Ser_Fecha, Ser_Hora, Latitud, Longitud
@@ -142,22 +120,6 @@
 
 
 </div>
-
-<a class="btn btn-primary btn-xs" href="#" id='opener'>Reportes Históricos</a>
-
-<!--  </datapicker>  --> 
-
-<br>
-  <div class="row">
-    <div class="panel-body col-md-6">
-      <div id="recargable"></div>
-    </div>
-    <div  class="img-thumbnail col-md-6" >
-      <object data="map.php" style="width: 100%; height: 400px;"></object>
-    </div>
-  </div>
-</div>
-  
-
+<!-- <a class="btn btn-default" href="#" id='opener'>Reportes Históricos</a> -->
 </body>
 </html>

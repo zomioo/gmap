@@ -16,31 +16,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   <script src="http://localhost/gmaps/bootstrap/js/bootstrap.min.js"></script>
 
-  <?php 
-  require 'database.php';
-  require 'funciones.php';
-
-if (isset($_POST['daterange']))
-{
-  $mov= $_POST['mov'];
-  $rang= $_POST['daterange'];    
-  $in=substr($rang, 0, 16);
-  $fin=substr($rang, 20, 17);
-
-
-
-  $objdatabase = new Database();
-$query="select r.Latitud as lat ,r.Longitud as lon, r.EVE ,CONCAT(r.Fecha,' ',r.Hora)as dt,r.Id_Movil 
-        from gps.sudamericana_reportes r 
-        where r.Id_Movil = '".$mov."' and r.EVE in (04,07) 
-        having dt between '".$in."' and '".$fin." '";
-  $sql = $objdatabase->prepare($query);
-  $sql->execute();
-
-  $result = $sql->fetchAll();
-  ?> 
-
-
       <style>
       html, body {
         height: 100%;
@@ -48,12 +23,7 @@ $query="select r.Latitud as lat ,r.Longitud as lon, r.EVE ,CONCAT(r.Fecha,' ',r.
         padding: 0;
        
       }
-  #mapa {
-        height: 93%;
-        width: 80%;
-        float: left;
-        position: relative;
-      }
+
   .table .table-hover: hover{
             color: red;
             background-color: yellow;
@@ -74,43 +44,82 @@ $query="select r.Latitud as lat ,r.Longitud as lon, r.EVE ,CONCAT(r.Fecha,' ',r.
 </head>
 <body>
   <br>
- <div class="container"> 
-  <div  class="col-md-12 label-info"><h3 style="color:;" class="text-center"><strong>Estación: <?php echo $mov;?></strong></h3></div>
-  <table  class="table table-striped table-hover table-bordered">
+
+ <div class="panel panel-primary"> 
+  <div  class="panel-heading ">
+      <div class="row">
+        <div  class="col-md-12"><h3 style="color:white;" class="text-center"><strong>Panel de Control</strong></h3></div>
+      </div>
+  </div>
+    
+<div style="width: 100%; margin-top:1%;" class="img-thumbnail" >
+<strong> Informe de la Estación: <?php echo $_POST['mov'];?>   en el    Período: <?php echo $_POST['mes'];?></strong></h3>
+  
+<br><br>
+  <table style="width: 95%; margin:1% 2.5%;" class="table table-striped table-hover table-bordered">
   <thead>
   <tr>
-    <th>Inicio</th>
-    <th>Fin</th>
-    <th>Duración</th>
+    <th class="text-center">Inicio</th>
+    <th class="text-center">Fin</th>
+    <th class="text-center">Duración</th>
   </tr>
   </thead>
   <tbody>
-  <?php
+  <?php 
+  require 'database.php';
+  require 'funciones.php';
+
+  if (isset($_POST['mes'])){
+  $mov= $_POST['mov'];
+  $mes= $_POST['mes'];    
+
+
+
+
+  $objdatabase = new Database();
+  $query="select r.Latitud as lat ,r.Longitud as lon, r.EVE ,CONCAT(r.Fecha,' ',r.Hora)as dt,DATE_FORMAT(r.Fecha,'%m-%Y') ma,r.Id_Movil 
+        from gps.sudamericana_reportes r 
+        where r.Id_Movil = '".$mov."' and r.EVE in (04,07) 
+        having ma='".$mes."'
+        order by dt";
+
+
+
+  $sql = $objdatabase->prepare($query);
+  $sql->execute();
+
+  $result = $sql->fetchAll();
   $auxE='07';
 
   foreach ($result as $key => $value) {
 
-   //echo $value['EVE'].' ' .$value['FH'].'<br>';
-   if ($value['EVE']=='04' and $auxE== '07'){
+  // echo $value['EVE'].' ' .$value['dt'].'<br>';
+
+   if ($value['EVE']=='07' and $auxE== '04'){
         
       $date1 = date_create($value['dt']); 
       $date = date_create($auxF); 
       echo '<tr>
-                <td>'.  date_format($date1, 'd/m/Y H:i:s').'</td>
-                <td> '. date_format($date, 'd/m/Y H:i:s').'</td><td>' ;
-                $duracion= tiempoIntervalo($value['FH'],$auxF);
+                <td class="text-center">'. date_format($date, 'd/m/Y H:i:s').'</td>
+                <td class="text-center"> '. date_format($date1, 'd/m/Y H:i:s').'</td><td class="text-center">' ;
+                $duracion= tiempoIntervalo($auxF,$value['dt']);
                 echo $duracion.'</td></tr>';
-     }
+    
+     
+   }
      $auxE=$value['EVE'];
      $auxF=$value['dt'];
-  
-  }
+  }}else{
+    ?> <tr><td colspan="3" class="default">No hay registros para mostrar</td></tr> 
+  <?php } 
 
 ?>
   </tbody>
  </table>
  <?php
-Echo $query;}
+//Echo $query;
 ?>
+ </div>
+
  </div>
 </body>

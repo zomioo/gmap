@@ -40,9 +40,17 @@ where u.Latitud <0 and u.Longitud <0 and u.Ser_Fecha >  '2016-01-01'");
 			<div class="close"><a href="#" class="simplemodal-close">x</a></div>
 			<div id="osx-modal-data">
 			
-                            <form action="linea4.php" method="post">
-                        <b>Seleccione el movil</b><br>
-                        <select name="mov" >
+                        <form action="linea4.php" method="post">
+                                                  <b>Seleccione el movil</b><br>
+                          <select name="mov" >
+                          <?php
+                              foreach ($result as $key => $value) 
+                                  {?>
+                                <option value="<?php echo $value['Id_Movil'];?>"><?php echo $value['Id_Movil'];?></option>
+                            <?php }?>
+                          </select><br><br>  
+                        <b>Seleccione el Período</b><br>
+                        <select name="mes" >
                         <?php
 
                                           $date = new DateTime();
@@ -75,11 +83,10 @@ where u.Latitud <0 and u.Longitud <0 and u.Ser_Fecha >  '2016-01-01'");
                                               $ant3=$ant3.'-'.$anio;
                                               break;
                                           }
-
-$ar= array('0' => $mes.'-'.$anio,
-            '1' => $ant1,
-            '2'=>$ant2,
-            '3'=>$ant3 );
+                                          $ar= array('0' => $mes.'-'.$anio,
+                                                      '1' => $ant1,
+                                                      '2'=>$ant2,
+                                                      '3'=>$ant3 );
                                   foreach ($ar as $key => $value) 
                                   {?>
 
